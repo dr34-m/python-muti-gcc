@@ -44,7 +44,7 @@ jobs:
         name: 构建docker镜像
         uses: docker/build-push-action@v6
         with:
-          file: .${{ env.PLATFORM_PAIR }}.Dockerfile
+          file: ${{ env.PLATFORM_PAIR }}.Dockerfile
           platforms: ${{ matrix.platform }}
           outputs: |
             type=image,name=${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }},push-by-digest=true,name-canonical=true,push=true

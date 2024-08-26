@@ -1,8 +1,7 @@
 FROM debian:stretch
 ENV PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin LANG=C.UTF-8
 COPY sources.list /etc/apt/sources.list
-RUN apt-get update \
-    && apt install -y gcc wget vim && cd ~
+RUN apt-get update && apt install -y gcc wget vim
 RUN cd ~ && wget https://sqlite.org/2024/sqlite-autoconf-3460000.tar.gz && tar -zxvf sqlite-autoconf-3460000.tar.gz \
     && cd sqlite-autoconf-3460000 && ./configure --prefix=/usr/local && make && make install && sqlite3 --version
 RUN cd ~ && wget -O openssl.tar.gz "https://www.openssl.org/source/openssl-1.1.1w.tar.gz" \
@@ -40,6 +39,6 @@ RUN cd ~ && apt install -y --no-install-recommends libbluetooth-dev tk-dev uuid-
     echo "22b849a10f86f5ddf7ce148ca2a31214504ee6c83ef626840fde6e5dcd809d11 *get-pip.py" | sha256sum -c -;  \
     export PYTHONDONTWRITEBYTECODE=1;  \
     python get-pip.py --disable-pip-version-check --no-cache-dir --no-compile "pip==24.2" "setuptools==73.0.1" ;  \
-    rm -f get-pip.py; pip --version \
+    rm -f get-pip.py; pip --version
 RUN pip install pyinstaller
 CMD ["/bin/sh"]

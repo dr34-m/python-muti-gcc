@@ -1,7 +1,7 @@
 FROM dr34m/python-gcc6:init
 RUN apt install -y g++ && cd ~ && wget -O openssl.tar.gz "https://www.openssl.org/source/openssl-1.1.1w.tar.gz" \
-    && tar xzf openssl.tar.gz && rm openssl.tar.gz && cd openssl-1.1.1w
-RUN ./config
+    && tar xzf openssl.tar.gz && rm openssl.tar.gz
+RUN  cd openssl-1.1.1w && ./config
 RUN make
 RUN make install
 RUN PATS="/usr/lib/arm-linux-gnueabihf" \

@@ -1,9 +1,9 @@
 FROM dr34m/python-gcc6:init
 RUN apt install -y g++ && cd ~ && wget -O openssl.tar.gz "https://www.openssl.org/source/openssl-1.1.1w.tar.gz" \
     && tar xzf openssl.tar.gz && rm openssl.tar.gz
-RUN ls && cd openssl-1.1.1w && ./config
-RUN cd openssl-1.1.1w && make
-RUN cd openssl-1.1.1w && make install
+RUN cd ~ && cd openssl-1.1.1w && ./config
+RUN cd ~ && cd openssl-1.1.1w && make
+RUN cd ~ && cd openssl-1.1.1w && make install
 RUN PATS="/usr/lib/arm-linux-gnueabihf" \
     && cp /usr/local/lib/libcrypto.so "$PATS/libcrypto.so" \
     && cp /usr/local/lib/libcrypto.so.1.1 "$PATS/libcrypto.so.1.1" \

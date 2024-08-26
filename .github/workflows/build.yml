@@ -3,7 +3,7 @@ name: 构建
 on:
   push:
     branches: [ 'main' ]
-    paths: [ 'Dockerfile.linux-arm-v7', '.github/workflows/build.yml' ]
+    paths: [ 'linux-arm-v7.Dockerfile', '.github/workflows/build.yml' ]
 
 env:
   APP_NAME: demo

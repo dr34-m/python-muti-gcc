@@ -3,7 +3,7 @@ name: 初始化debian
 on:
   push:
     branches: [ 'main' ]
-    paths: [ 'Dockerfile.init', '.github/workflows/buildInit.yml' ]
+    paths: [ 'init.Dockerfile', '.github/workflows/buildInit.yml' ]
 
 env:
   APP_NAME: demo
@@ -44,7 +44,7 @@ jobs:
         name: 构建docker镜像
         uses: docker/build-push-action@v6
         with:
-          file: Dockerfile.init
+          file: init.Dockerfile
           platforms: ${{ matrix.platform }}
           outputs: |
             type=image,name=${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }},push-by-digest=true,name-canonical=true,push=true

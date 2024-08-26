@@ -1,4 +1,4 @@
-dr34m/python-gcc6:init
+FROM dr34m/python-gcc6:init
 RUN cd ~ && wget -O openssl.tar.gz "https://www.openssl.org/source/openssl-1.1.1w.tar.gz" \
     && tar xzvf openssl.tar.gz && rm openssl.tar.gz && cd openssl-1.1.1w && ./config && make && make install
 RUN PATS="/usr/lib/arm-linux-gnueabihf" \

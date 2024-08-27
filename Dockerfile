@@ -1,12 +1,12 @@
 FROM dr34m/python-gcc6:deps-without-python
 ENV PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin LANG=C.UTF-8
-ENV GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D
 ENV PYTHON_GET_PIP_URL=https://github.com/pypa/get-pip/raw/66d8a0f637083e2c3ddffc0cb1e65ce126afb856/public/get-pip.py
 ENV PYTHON_GET_PIP_SHA256=6fb7b781206356f45ad79efbb19322caa6c2a5ad39092d0d44d0fec94117e118
 ENV PYTHON_VERSION=3.11.9 PYTHON_PIP_VERSION=24.2 PYTHON_SETUPTOOLS_VERSION=65.5.1
 RUN -c set -eux; wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz"; \
     wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc"; \
-    export GNUPGHOME="$(mktemp -d)"; gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys "$GPG_KEY"; \
+    export GNUPGHOME="$(mktemp -d)"; \
+    gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys A035C8C19219BA821ECEA86B64E628F8D684696D; \
     gpg --batch --verify python.tar.xz.asc python.tar.xz; gpgconf --kill all; \
     rm -rf "$GNUPGHOME" python.tar.xz.asc; mkdir -p /usr/src/python; \
     tar --extract --directory /usr/src/python --strip-components=1 --file python.tar.xz; rm python.tar.xz; \

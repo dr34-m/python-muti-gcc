@@ -3,7 +3,7 @@ name: 初始化debian
 on:
   push:
     branches: [ 'main' ]
-    paths: [ 'init.Dockerfile', '.github/workflows/buildInit.yml' ]
+    paths: [ 'dockerfiles/deps.Dockerfile', '.github/workflows/buildInit.yml' ]
 
 env:
   APP_NAME: demo
@@ -44,7 +44,7 @@ jobs:
         name: 构建docker镜像
         uses: docker/build-push-action@v6
         with:
-          file: init.Dockerfile
+          file: dockerfiles/deps.Dockerfile
           platforms: ${{ matrix.platform }}
           outputs: |
             type=image,name=${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }},push-by-digest=true,name-canonical=true,push=true
@@ -86,4 +86,4 @@ jobs:
       - name: 创建清单并推送
         working-directory: /tmp/digests
         run: |
-          docker buildx imagetools create -t ${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }}:no-python $(printf '${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }}@sha256:%s ' *)
+          docker buildx imagetools create -t ${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }}:deps-without-python $(printf '${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }}@sha256:%s ' *)

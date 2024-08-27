@@ -3,7 +3,7 @@ name: 增加依赖
 on:
   push:
     branches: [ 'main' ]
-    paths: [ 'dockerfiles/pip-req.Dockerfile', '.github/workflows/buildPipReq.yml' ]
+    paths: [ '.github/workflows/buildPipReq.yml' ]
 
 env:
   APP_NAME: demo
@@ -44,7 +44,7 @@ jobs:
         name: 构建docker镜像
         uses: docker/build-push-action@v6
         with:
-          file: dockerfiles/pip-req.Dockerfile
+          file: dockerfiles/pip-req-${{ env.PLATFORM_PAIR }}.Dockerfile
           platforms: ${{ matrix.platform }}
           outputs: |
             type=image,name=${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }},push-by-digest=true,name-canonical=true,push=true

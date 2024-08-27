@@ -1,9 +1,9 @@
-name: 构建
+name: 构建python
 
 on:
   push:
     branches: [ 'main' ]
-    paths: [ 'linux-arm64.Dockerfile', '.github/workflows/build.yml' ]
+    paths: [ 'Dockerfile', '.github/workflows/build.yml' ]
 
 env:
   APP_NAME: demo
@@ -18,9 +18,9 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-#          - linux/amd64
+          - linux/amd64
           - linux/arm64
-#          - linux/arm/v7
+          - linux/arm/v7
 
     steps:
       - name: 替换平台名称中的斜杠为横杠
@@ -44,7 +44,6 @@ jobs:
         name: 构建docker镜像
         uses: docker/build-push-action@v6
         with:
-          file: ${{ env.PLATFORM_PAIR }}.Dockerfile
           platforms: ${{ matrix.platform }}
           outputs: |
             type=image,name=${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }},push-by-digest=true,name-canonical=true,push=true
@@ -86,4 +85,4 @@ jobs:
       - name: 创建清单并推送
         working-directory: /tmp/digests
         run: |
-          docker buildx imagetools create -t ${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }}:arm64 $(printf '${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }}@sha256:%s ' *)
+          docker buildx imagetools create -t ${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }}:3.11.9 $(printf '${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }}@sha256:%s ' *)

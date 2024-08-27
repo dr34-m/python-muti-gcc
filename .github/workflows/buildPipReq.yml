@@ -1,0 +1,89 @@
+name: 增加依赖
+
+on:
+  push:
+    branches: [ 'main' ]
+    paths: [ 'dockerfiles/pip-req.Dockerfile', '.github/workflows/buildPipReq.yml' ]
+
+env:
+  APP_NAME: demo
+  DOCKER_USER: dr34m
+  DOCKER_NAME: python-gcc6
+
+jobs:
+  build-docker:
+    name: 构建Docker
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+          - linux/arm/v7
+
+    steps:
+      - name: 替换平台名称中的斜杠为横杠
+        run: |
+          platform=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+
+      - name: 设置QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: 设置Docker BuildX
+        uses: docker/setup-buildx-action@v3
+
+      - name: 登录到DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKER_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - id: build-image
+        name: 构建docker镜像
+        uses: docker/build-push-action@v6
+        with:
+          file: dockerfiles/pip-req.Dockerfile
+          platforms: ${{ matrix.platform }}
+          outputs: |
+            type=image,name=${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }},push-by-digest=true,name-canonical=true,push=true
+
+      - name: 导出digest
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build-image.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+
+      - name: 上传digest到artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ env.PLATFORM_PAIR }}
+          path: /tmp/digests/*
+          retention-days: 1
+
+  merge-docker:
+    name: 合并镜像上传
+    runs-on: ubuntu-latest
+    needs: [build-docker]
+    steps:
+      - name: 下载digest
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: 设置Docker BuildX
+        uses: docker/setup-buildx-action@v3
+
+      - name: 登录到DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKER_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: 创建清单并推送
+        working-directory: /tmp/digests
+        run: |
+          docker buildx imagetools create -t ${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }}:pip-req $(printf '${{ env.DOCKER_USER }}/${{ env.DOCKER_NAME }}@sha256:%s ' *)

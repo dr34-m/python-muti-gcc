@@ -10,8 +10,9 @@ RUN set -ex; apt-get update; \
     then echo 'default-libmysqlclient-dev'; else echo 'libmysqlclient-dev'; fi ) ;  rm -rf /var/lib/apt/lists/*; \
     wget -O openssl.tar.gz "https://www.openssl.org/source/openssl-1.1.1w.tar.gz"; mkdir -p /usr/src/openssl; \
     tar --extract --directory /usr/src/openssl --strip-components=1 --file openssl.tar.gz; rm openssl.tar.gz; \
-    cd /usr/src/openssl; ./config; make; make install; gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
-    PATS="/usr/lib/$gnuArch"; cp /usr/local/lib/libcrypto.so "$PATS/libcrypto.so"; \
-    cp /usr/local/lib/libcrypto.so.1.1 "$PATS/libcrypto.so.1.1"; cp /usr/local/lib/libssl.so "$PATS/libssl.so"; \
-    cp /usr/local/lib/libssl.so.1.1 "$PATS/libssl.so.1.1"; openssl version
+    cd /usr/src/openssl; ./config; make; make install; \
+    gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; PATS="/usr/lib/$gnuArch"; \
+    cp /usr/local/lib/libcrypto.so "$PATS/libcrypto.so"; cp /usr/local/lib/libcrypto.so.1.1 "$PATS/libcrypto.so.1.1"; \
+    cp /usr/local/lib/libssl.so "$PATS/libssl.so"; cp /usr/local/lib/libssl.so.1.1 "$PATS/libssl.so.1.1"; \
+    openssl version
 

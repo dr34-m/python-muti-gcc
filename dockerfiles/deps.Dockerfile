@@ -15,4 +15,3 @@ RUN set -ex; apt-get update; \
     cp /usr/local/lib/libcrypto.so "$PATS/libcrypto.so"; cp /usr/local/lib/libcrypto.so.1.1 "$PATS/libcrypto.so.1.1"; \
     cp /usr/local/lib/libssl.so "$PATS/libssl.so"; cp /usr/local/lib/libssl.so.1.1 "$PATS/libssl.so.1.1"; \
     openssl version
-

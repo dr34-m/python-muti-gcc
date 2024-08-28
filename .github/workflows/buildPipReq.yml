@@ -1,4 +1,4 @@
-name: 增加依赖
+name: 安装pip依赖
 
 on:
   push:

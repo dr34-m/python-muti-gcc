@@ -1,9 +1,9 @@
-name: 初始化debian
+name: 安装构建python所需
 
 on:
   push:
     branches: [ 'main' ]
-    paths: [ 'dockerfiles/deps.Dockerfile', '.github/workflows/buildInit.yml' ]
+    paths: [ 'dockerfiles/deps.Dockerfile', '.github/workflows/buildDeps.yml' ]
 
 env:
   APP_NAME: demo
@@ -19,8 +19,8 @@ jobs:
       matrix:
         platform:
           - linux/amd64
-          - linux/arm64
-          - linux/arm/v7
+#          - linux/arm64
+#          - linux/arm/v7
 
     steps:
       - name: 替换平台名称中的斜杠为横杠

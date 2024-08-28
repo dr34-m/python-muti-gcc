@@ -12,15 +12,15 @@ env:
 
 jobs:
   build-docker:
-    name: 构建Docker与linux
+    name: 构建Docker
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         platform:
           - linux/amd64
-#          - linux/arm64
-#          - linux/arm/v7
+          - linux/arm64
+          - linux/arm/v7
 
     steps:
       - name: 替换平台名称中的斜杠为横杠
@@ -62,7 +62,7 @@ jobs:
           retention-days: 1
 
   merge-docker:
-    name: 合并镜像上传
+    name: 合并镜像
     runs-on: ubuntu-latest
     needs: [build-docker]
     steps:

@@ -12,6 +12,5 @@ RUN set -ex; apt-get update; \
     tar --extract --directory /usr/src/openssl --strip-components=1 --file openssl.tar.gz; rm openssl.tar.gz; \
     cd /usr/src/openssl; ./config; make; make install; \
     gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; PATS="/usr/lib/$gnuArch"; \
-    cp /usr/local/lib/libcrypto.so "$PATS/libcrypto.so"; cp /usr/local/lib/libcrypto.so.1.1 "$PATS/libcrypto.so.1.1"; \
-    cp /usr/local/lib/libssl.so "$PATS/libssl.so"; cp /usr/local/lib/libssl.so.1.1 "$PATS/libssl.so.1.1"; \
+    cp /usr/local/lib/libcrypto.* "$PATS/"; cp /usr/local/lib/libssl.* "$PATS/"; \
     openssl version

@@ -3,7 +3,7 @@ name: 安装pip依赖
 on:
   push:
     branches: [ 'main' ]
-    paths: [ '.github/workflows/buildPipReq.yml' ]
+    paths: [ 'requirements.txt', '.github/workflows/buildPipReq.yml' ]
 
 env:
   APP_NAME: demo
